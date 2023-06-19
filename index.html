@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Webカメラアプリ</title>
+  <style>
+    /* スタイルの定義 */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .video {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Webカメラアプリ</h1>
+    <video class="video" id="videoElement" autoplay></video>
+    <button class="button" id="startButton">カメラを開始</button>
+    <button class="button" id="stopButton">カメラを停止</button>
+  </div>
+
+  <script>
+    // JavaScriptコードをここに追加
+    var videoElement = document.getElementById("videoElement");
+    var startButton = document.getElementById("startButton");
+    var stopButton = document.getElementById("stopButton");
+
+    // カメラを開始する処理
+    startButton.addEventListener("click", function() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(function(stream) {
+            videoElement.srcObject = stream;
+          })
+          .catch(function(error) {
+            console.error("カメラの起動に失敗しました: ", error);
+          });
+      }
+    });
+
+    // カメラを停止する処理
+    stopButton.addEventListener("click", function() {
+      var stream = videoElement.srcObject;
+      var tracks = stream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+      videoElement.srcObject = null;
+    });
+  </script>
+</body>
+</html>
